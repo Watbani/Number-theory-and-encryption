@@ -1,0 +1,100 @@
+import string
+import random
+from collections import Counter
+
+encryptionascii2 = []
+
+for i in string.ascii_lowercase:
+   encryptionascii2.append(i)
+
+dct_for_encryption = {}
+
+for i in string.ascii_lowercase:
+   random_letter = random.choice(encryptionascii2)
+   dct_for_encryption[i] = random_letter
+   encryptionascii2.remove(random_letter)
+
+
+
+def encrypt(text, dct=dct_for_encryption):
+   ls = []
+   text = text.lower()
+   for i in text:
+
+      if i in string.ascii_lowercase:
+       ls.append(dct_for_encryption[i])
+      else:
+         ls.append(i)
+
+   encrypted = ''.join(ls)
+
+   return encrypted
+
+answer = input("would you like to encrypt a file or typed text? Choose 1 for the former and 2 for the latter: ")
+
+# fr = open("reqText.txt", "r")
+# theText = fr.read()
+# fr.close()
+encrypted='none'
+
+
+
+def decrypt(text, dct = dct_for_encryption):
+    ls = []
+    for i in text:
+        if i in dct:
+            ls.append(list(dct.keys())[list(dct.values()).index(i)])
+        else:
+            ls.append(i)
+    decrypted = ''.join(ls)
+    return decrypted
+
+
+if answer == '1':
+    textFileName = input("File name: ")
+    textAns = open(textFileName, 'r')
+    text2Enc = textAns.read()
+    textAns.close()
+    litsu = [',', '.', '\n', ';', ':', '?', '-', '!','$','#','%',
+            '^', '*','-','/', '$', '1','2','3','4','5','6','7','8','9',]
+    for i in litsu:
+        text2Enc = text2Enc.replace(i, "")
+    s = encrypt(text2Enc, dct_for_encryption)
+
+    dictTxt = Counter(s.lower())
+    #print("Encrypted: ")
+    #print(" ")
+    #print(s)
+    print(" ")
+    print(dictTxt)
+    print("Key: ")
+
+    print(dictTxt)
+
+    d = decrypt(s)
+    DictTxtFileDec = Counter(d.lower())
+    print("Decrypted: ")
+    #print(d)
+    #print("\n")
+    #print(DictTxtFileDec)
+
+
+elif answer == '2':
+    theText = input("Encrypt: ")
+
+    dictTxt = Counter(theText.lower())
+    print(dictTxt)
+    encrypted = encrypt(theText, dct_for_encryption)
+    decrypted = decrypt(encrypted)
+    dictTxtEnc = Counter(encrypted.lower())
+    print(dictTxtEnc)
+
+    litsu = [',', '.', '\n', ';', ':']
+    for i in litsu:
+        theText = theText.replace(i, "")
+    print(encrypted)
+    print(decrypted)
+
+print("Key: ")
+print(dct_for_encryption)
+decrypted = decrypt(encrypted, dct_for_encryption)
